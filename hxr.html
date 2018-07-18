@@ -1,0 +1,64 @@
+<!DOCTYPE HTML>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+  </head>
+
+  <script>
+    function loadData() {
+      let POS_open_teg = "<pos>";
+      let POS_close_teg = "</pos>";
+      var xhr = new XMLHttpRequest();
+      
+      var country = document.getElementById("__country").value;
+      var city = document.getElementById("__city").value;
+      var street = document.getElementById("__street").value;
+      var building = document.getElementById("__building").value;
+      var housing = document.getElementById("__housing").value;
+      var reqToken = 'https://geocode-maps.yandex.ru/1.x/?geocode=' + country + ',+' + city + ',+' + street + ',+' + building + ',+' + housing;
+
+      //xhr.open('GET', 'https://geocode-maps.yandex.ru/1.x/?geocode=Москва,+Байкальская+Федина+улица,+дом+25, стр+2', false);
+      xhr.open('GET', reqToken, false);
+      //XMLHttpRequest.open(method, url, async)
+      xhr.send();
+
+      if (xhr.status != 200) {
+        // обработать ошибку
+        alert('Ошибка ' + xhr.status + ': ' + xhr.statusText);
+      } else {
+        // вывести результат
+        //alert(xhr.responseText);
+        var str = xhr.responseText;
+
+        var POSbegin = str.indexOf(POS_open_teg) + POS_open_teg.length;
+        var POSend = str.indexOf(POS_close_teg);
+        var POSlen = POSend - POSbegin;
+
+//alert(POSbegin); alert(POSend); alert(POSlen);
+/*
+        var node = document.createElement("P");
+        var textnode = document.createTextNode(str); 
+        node.appendChild(textnode);
+        document.getElementById("data").appendChild(node);
+*/
+        alert( str.substr(POSbegin, POSlen));
+        //alert(str);
+      }
+    }
+  </script>
+
+  <body>
+    <form action=function loadData() {}>     </form>
+      <input type="text" size="40" placeholder="country" id="__country" name="country">
+      <input type="text" size="40" placeholder="city" id="__city">
+      <input type="text" size="40" placeholder="street" id="__street">
+      <input type="text" size="40" placeholder="building" id="__building">
+      <input type="text" size="40" placeholder="housing" id="__housing">
+      <input type="reset" value="Очистить">
+      <button onclick="loadData()">Загрузить данные!</button>
+    <p id="data"> </p>
+
+  </body>
+
+</html>
